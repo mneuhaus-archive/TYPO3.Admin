@@ -47,7 +47,9 @@ class CacheManager{
 		"Admin_Cache", 
 		"Admin_TemplateCache", 
 		"Admin_ActionCache", 
-		"Admin_ImplementationCache"
+		"Admin_ImplementationCache",
+		"Foo_ContentManagement_Annotations",
+		"Foo_ContentManagement_ShortNames"
 	);
 	
 	

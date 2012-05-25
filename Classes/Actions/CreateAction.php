@@ -62,7 +62,7 @@ class CreateAction extends \Foo\ContentManagement\Core\Actions\AbstractAction {
 	 * @author Marc Neuhaus <mneuhaus@famelo.com>
 	 * */
 	public function execute($being, $ids = null) {
-		$object = new $being();
+		$object = $this->contentManager->getObject($being);
 		$this->view->assign("object", $object);
 	}
 

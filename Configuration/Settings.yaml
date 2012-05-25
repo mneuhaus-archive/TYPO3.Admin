@@ -2,6 +2,17 @@
 # Settings Configuration for the Admin package                           #
 #                                                                        #
 
+Debug:
+  Profiling:
+    Classes:
+      - Foo\ContentManagement.*->getClassAnnotations.*
+      - Foo\ContentManagement\Controller.*
+      - Foo\ContentManagement\Adapters.*
+      - Foo\ContentManagement\View\.*
+      - Foo\ContentManagement\Core\Adapters\.*
+      - Foo\ContentManagement\Factory\.*
+      - Foo\ContentManagement\OptionsProvider\.*
+
 Foo:
   ContentManagement:
     Annotations: []
@@ -23,8 +34,10 @@ Foo:
           DatetimeFormat: Y-m-d\TH:i:s
     Adapters:
       Foo\ContentManagement\Adapters\DoctrineAdapter: active
+      Foo\ContentManagement\Adapters\NodeAdapter: active
     AnnotationProvider:
       - Foo\ContentManagement\Reflection\Provider\DefaultsAnnotationProvider
+      - Foo\ContentManagement\Reflection\Provider\NodeContentTypeAnnotationProvider
       - Foo\ContentManagement\Reflection\Provider\ReflectionAnnotationProvider
       - Foo\ContentManagement\Reflection\Provider\SettingsAnnotationProvider
     Fallbacks:

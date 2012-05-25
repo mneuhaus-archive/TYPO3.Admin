@@ -70,7 +70,7 @@ class UpdateAction extends \Foo\ContentManagement\Core\Actions\AbstractAction {
 	 * @author Marc Neuhaus <mneuhaus@famelo.com>
 	 * */
 	public function execute($class, $ids = null) {
-		$object = $this->adapter->getObject($class, current($ids));
+		$object = $this->contentManager->getObject($class, current($ids));
 		$this->view->assign("object", $object);
 	}
 

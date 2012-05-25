@@ -83,16 +83,18 @@ class ContentManager {
 	 * @author Marc Neuhaus
 	 */
 	public function getAdapterByClass($class){
-		$implementations = class_implements("\\" . ltrim($class, "\\"));
-		if(in_array("Doctrine\ORM\Proxy\Proxy", $implementations))
-			$class = get_parent_class("\\" . ltrim($class, "\\"));
+		try{
+			$implementations = class_implements("\\" . ltrim($class, "\\"));
+			if(in_array("Doctrine\ORM\Proxy\Proxy", $implementations))
+				$class = get_parent_class("\\" . ltrim($class, "\\"));
+		}catch(\TYPO3\FLOW3\Error\Exception $e){}
 
 		$this->adapters = $this->getAdapters();
 		
 		$cache = $this->cacheManager->getCache('Admin_Cache');
 		$identifier = "AdaptersByBeing-".sha1($class);
 		
-		if(!$cache->has($identifier) || true){
+		if(!$cache->has($identifier)){
 			$adaptersByBeings = array();
 			foreach ($this->adapters as $adapter) {
 				foreach ($adapter->getClasses() as $class) {
@@ -161,7 +163,7 @@ class ContentManager {
 		$cache = $this->cacheManager->getCache('Admin_Cache');
 		$identifier = "Groups-".sha1(implode("-", array_keys($this->adapters)));
 		
-		if(!$cache->has($identifier)){
+		if(!$cache->has($identifier) || true){
 			$groups = array();
 			$adapters = array();
 			foreach ($this->adapters as $adapter) {
@@ -220,13 +222,18 @@ class ContentManager {
 		return $this->getAdapterByClass($class)->getObjects($class);
 	}
 
+	public function getObject($class, $id = null) {
+		$class = ltrim($class, "\\");
+		return $this->getAdapterByClass($class)->getObject($class, $id);
+	}
+
 	public function getPropertyAnnotations($class, $property) {
 		$classAnnotations = $this->annotationService->getClassAnnotations($class);
 		return $classAnnotations->getPropertyAnnotations($property);
 	}
 
 	public function getProperties($object, $context = null) {
-		$classAnnotations = $this->getClassAnnotations(get_class($object));
+		$classAnnotations = $this->getClassAnnotations($object->getContentType());
 		$classAnnotations->setObject($object);
 		return $classAnnotations->getProperties($context);
 	}

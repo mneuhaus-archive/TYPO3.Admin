@@ -11,9 +11,18 @@ namespace Foo\ContentManagement\Reflection\Wrapper;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  */
 abstract class AbstractAnnotationWrapper {
+	/**
+	 * @var \Foo\ContentManagement\Adapters\ContentManager
+	 * @FLOW3\Inject
+	 */
+	protected $contentManager;	
+
+
 	public $annotations = array();
 	protected $index = array();
 

@@ -70,6 +70,7 @@ abstract class AbstractAnnotationProvider implements AnnotationProviderInterface
 		if(class_exists("Foo\ContentManagement\Annotations\\" . $annotationName))
 			return "Foo\ContentManagement\Annotations\\" . $annotationName;
 
+		return false;
 	}
 }
 ?>

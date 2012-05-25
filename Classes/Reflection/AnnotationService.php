@@ -62,20 +62,24 @@ class AnnotationService {
 	protected $runtimeCache = array();
 
 	public function getClassAnnotations($class){
-		$implementations = class_implements("\\" . ltrim($class, "\\"));
-		if(in_array("Doctrine\ORM\Proxy\Proxy", $implementations))
-			$class = get_parent_class("\\" . ltrim($class, "\\"));
+		try{
+			$implementations = class_implements("\\" . ltrim($class, "\\"));
+			if(in_array("Doctrine\ORM\Proxy\Proxy", $implementations))
+				$class = get_parent_class("\\" . ltrim($class, "\\"));
+		}catch (\TYPO3\FLOW3\Error\Exception $e){}
 
 		$cache = $this->cacheManager->getCache('Foo_ContentManagement_Annotations');
 		$identifier = $this->cacheManager->createIdentifier($class);
 
-		if(!$cache->has($identifier)){
+		if(!$cache->has($identifier) || true){
 
 			$annotations = array();
 			$annotationProviders = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, "Foo.ContentManagement.AnnotationProvider");
 			foreach($annotationProviders as $annotationProviderClass){
 				$annotationProvider = new $annotationProviderClass();
 				$annotations = $this->merge($annotations, $annotationProvider->getClassAnnotations($class));
+				// if($class == "TYPO3.TYPO3:Page")
+				// 	var_dump($annotationProviderClass, $annotations);
 			}
 
 			$this->runtimeCache[$class] = new Wrapper\ClassAnnotationWrapper($annotations);

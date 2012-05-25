@@ -11,6 +11,8 @@ namespace Foo\ContentManagement\Reflection\Wrapper;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\FLOW3\Annotations as FLOW3;
+
 /**
  */
 class ClassAnnotationWrapper extends AbstractAnnotationWrapper {
@@ -19,9 +21,11 @@ class ClassAnnotationWrapper extends AbstractAnnotationWrapper {
 		$property = new \Foo\ContentManagement\Reflection\Wrapper\PropertyAnnotationWrapper($properties[$propertyName]);
 		$property->setProperty($propertyName);
 		$property->setClass($this->getClass());
+		
 		if($this->has("Object")){
-			if(\TYPO3\FLOW3\Reflection\ObjectAccess::isPropertyGettable($this->get("Object"), $propertyName))
-				$property->setValue(\TYPO3\FLOW3\Reflection\ObjectAccess::getProperty($this->get("Object"), $propertyName));
+			$adapter = $this->contentManager->getAdapterByClass($this->getClass());
+			if($adapter->isObjectPropertyGettable($this->get("Object"), $propertyName))
+				$property->setValue($adapter->getObjectProperty($this->get("Object"), $propertyName));
 		}
 		return $property;
 	}
