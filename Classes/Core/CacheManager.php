@@ -39,6 +39,10 @@ class CacheManager{
 	 * @FLOW3\Inject
 	 */
 	protected $cacheManager;
+
+	public function injectCacheManager(\TYPO3\FLOW3\Cache\CacheManager $cacheManager) {
+		$this->cacheManager = $cacheManager;
+	}
 	
 	/**
 	 * @var array
@@ -48,8 +52,8 @@ class CacheManager{
 		"Admin_TemplateCache", 
 		"Admin_ActionCache", 
 		"Admin_ImplementationCache",
-		"Foo_ContentManagement_Annotations",
-		"Foo_ContentManagement_ShortNames"
+		"Foo_ContentManagement_ShortNames",
+		"Foo_ContentManagement_Annotations"
 	);
 	
 	
@@ -65,6 +69,10 @@ class CacheManager{
 
 	public function createIdentifier($string) {
 		return preg_replace("/[\/\/:\.\\\\\\?%=]+/", "_", $string);
+	}
+
+	public function flushCachesByChangedFiles($fileMonitorIdentifier, array $changedFiles) {
+		$this->flushAdminCaches();
 	}
 }
 
