@@ -32,6 +32,12 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
 abstract class AbstractAdapter implements \Foo\ContentManagement\Core\Adapters\AdapterInterface {
+    /**
+     * @var integer
+     * @author Marc Neuhaus <apocalip@gmail.com>
+     */
+    protected $priority = 10;
+
 	/**
 	 * @var \Foo\ContentManagement\Reflection\AnnotationService
 	 * @FLOW3\Inject
@@ -112,25 +118,22 @@ abstract class AbstractAdapter implements \Foo\ContentManagement\Core\Adapters\A
 		}
 		return $filters;
 	}
-	
-	/**
-	 * returns the specified property of the mixed variable
-	 *
-	 * @param string $property 
-	 * @param string $mixed 
-	 * @return void
-	 * @author Marc Neuhaus
-	 */
-	public function getValue($property, $mixed){
-		$value = null;
-		try {
-			if(is_object($mixed) || is_array($mixed))
-				$value = \TYPO3\FLOW3\Reflection\ObjectAccess::getProperty($mixed, $property);
-		} catch(\TYPO3\FLOW3\Reflection\Exception\PropertyNotAccessibleException $e) {
-			var_dump($e);
-		}
-		return $value;
-	}
+
+	public function isObjectPropertyGettable($object, $property) {
+        return \TYPO3\FLOW3\Reflection\ObjectAccess::isPropertyGettable($object, $property);
+    }
+
+    public function getObjectProperty($object, $property) {
+        return \TYPO3\FLOW3\Reflection\ObjectAccess::getProperty($object, $property);
+    }
+
+    public function getPriority() {
+    	return $this->priority;
+    }
+
+    public function getType($object) {
+    	return get_class($object);
+    }
 }
 
 ?>

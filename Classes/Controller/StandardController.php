@@ -140,7 +140,7 @@ class StandardController extends \TYPO3\TYPO3\Controller\Module\StandardControll
 		$cache = $this->cacheManager->getCache('Admin_Cache');
 		$identifier = "ClassShortNames-".sha1(implode("-", array_keys($this->adapters)));
 
-		if(!$cache->has($identifier) || true){
+		if(!$cache->has($identifier)){
 			$shortNames = array();
 			foreach ($this->adapters as $adapter) {
 				foreach ($adapter->getGroups() as $group => $beings) {

@@ -34,6 +34,12 @@ use TYPO3\FLOW3\Annotations as FLOW3;
  */
 class NodeAdapter extends \Foo\ContentManagement\Core\Adapters\AbstractAdapter {
     /**
+     * @var integer
+     * @author Marc Neuhaus <apocalip@gmail.com>
+     */
+    protected $priority = 10;
+
+    /**
      * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
      * @author Marc Neuhaus <apocalip@gmail.com>
      * @FLOW3\Inject
@@ -105,7 +111,13 @@ class NodeAdapter extends \Foo\ContentManagement\Core\Adapters\AbstractAdapter {
     }
 
     public function getClasses(){
-        return array_keys($this->contentTypeManager->getFullConfiguration());
+        $classes = array_keys($this->contentTypeManager->getFullConfiguration());
+        $classes[] = "TYPO3\TYPO3CR\Domain\Model\Node";
+        return $classes;
+    }
+
+    public function getType($object) {
+        return $object->getContentType();
     }
 
     public function getGroups() {

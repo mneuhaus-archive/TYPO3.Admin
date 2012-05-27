@@ -239,54 +239,7 @@ class DoctrineAdapter extends \Foo\ContentManagement\Core\Adapters\AbstractAdapt
 
         #return $object;
     }
-/*
-    public function transform_($data, $target) {
-        $data = $this->cleanUpBlanks($data);
 
-        $value = $this->propertyMapper->convert($data, $target, \Foo\ContentManagement\Core\PropertyMappingConfiguration::getConfiguration());
-
-        $this->validationResults = $this->propertyMapper->getMessages();
-
-        $validator = $this->validatorResolver->getBaseValidatorConjunction($target);
-        $validationMessages = $validator->validate($value);
-        $this->validationResults->merge($validationMessages);
-        $errors = $this->validationResults->getFlattenedErrors();
-
-        if (empty($errors))
-            return $value;
-        else
-            return $errors;
-    }
-
-    public function cleanUpBlanks($data, $removeEmptyArrays = false, $removeUnchangedDefaults = true) {
-        $defaults = array();
-        foreach ($data as $key => $value) {
-            if($key === "{counter}"){
-                $defaults = $value;
-            }
-
-            if (is_array($value)) {
-                $data[$key] = $this->cleanUpBlanks($value, true);
-            }
-            if (is_object($value) && !empty($value->FLOW3_Persistence_Entity_UUID)) {
-                $data[$key] = $value->FLOW3_Persistence_Entity_UUID;
-            }
-
-            if (empty($data[$key]) && $data[$key] !== false && $data[$key] !== 0) {
-                if (is_array($data[$key])) {
-                    if ($removeEmptyArrays)
-                        unset($data[$key]);
-                } else {
-                    unset($data[$key]);
-                }
-            }
-
-            if(serialize($value) == serialize($defaults) && $removeUnchangedDefaults)
-                unset($data[$key]);
-        }
-        return $data;
-    }
-*/
 }
 
 ?>

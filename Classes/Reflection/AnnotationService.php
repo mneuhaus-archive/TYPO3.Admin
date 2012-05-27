@@ -71,7 +71,7 @@ class AnnotationService {
 		$cache = $this->cacheManager->getCache('Foo_ContentManagement_Annotations');
 		$identifier = $this->cacheManager->createIdentifier($class);
 
-		if(!$cache->has($identifier) || true){
+		if(!$cache->has($identifier)){
 
 			$annotations = array();
 			$annotationProviders = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, "Foo.ContentManagement.AnnotationProvider");
@@ -107,7 +107,7 @@ class AnnotationService {
 		$cache = $this->cacheManager->getCache('Admin_ImplementationCache');
 		$identifier = "ClassesTaggedWith-".implode("_", $tags);
 
-		if(!$cache->has($identifier) || true){
+		if(!$cache->has($identifier)){
 			$classes = array();
 
 			$activePackages = $this->packageManager->getActivePackages();

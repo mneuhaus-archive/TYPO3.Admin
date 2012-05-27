@@ -83,6 +83,9 @@ class ContentManager {
 	 * @author Marc Neuhaus
 	 */
 	public function getAdapterByClass($class){
+		if(is_object($class))
+			$class = get_class($class);
+
 		try{
 			$implementations = class_implements("\\" . ltrim($class, "\\"));
 			if(in_array("Doctrine\ORM\Proxy\Proxy", $implementations))
@@ -98,11 +101,12 @@ class ContentManager {
 			$adaptersByBeings = array();
 			foreach ($this->adapters as $adapter) {
 				foreach ($adapter->getClasses() as $class) {
-					$adaptersByBeings[$class] = get_class($adapter);
+					if(!isset($adaptersByBeings[$class]))
+						$adaptersByBeings[$class] = get_class($adapter);
 				}
 			}
 			
-			$cache->set($identifier,$adaptersByBeings);
+			$cache->set($identifier, $adaptersByBeings);
 		}else{
 			$adaptersByBeings = $cache->get($identifier);
 		}
@@ -135,6 +139,7 @@ class ContentManager {
 				$adapters[$adapter] = $this->objectManager->get($adapter);
 			}
 		}
+		uasort($adapters, function($a, $b){ return $a->getPriority() > $b->getPriority() ? 1 : -1; });
 		return $adapters;
 	}
 
@@ -163,7 +168,7 @@ class ContentManager {
 		$cache = $this->cacheManager->getCache('Admin_Cache');
 		$identifier = "Groups-".sha1(implode("-", array_keys($this->adapters)));
 		
-		if(!$cache->has($identifier) || true){
+		if(!$cache->has($identifier)){
 			$groups = array();
 			$adapters = array();
 			foreach ($this->adapters as $adapter) {
@@ -233,7 +238,8 @@ class ContentManager {
 	}
 
 	public function getProperties($object, $context = null) {
-		$classAnnotations = $this->getClassAnnotations($object->getContentType());
+		$type = $this->getAdapterByClass($object)->getType($object);
+		$classAnnotations = $this->getClassAnnotations($type);
 		$classAnnotations->setObject($object);
 		return $classAnnotations->getProperties($context);
 	}
