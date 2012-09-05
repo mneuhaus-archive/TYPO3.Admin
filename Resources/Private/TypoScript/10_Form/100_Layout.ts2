@@ -93,11 +93,11 @@ prototype(TYPO3.Admin:Form.ElementBuilder) < prototype(TYPO3.TypoScript:Case) {
 		@position = '90'
 	}
 
-	#manyToOneInline {
-	#	condition = ${propertyAnnotations['Doctrine\ORM\Mapping\ManyToOne']}
-	#	@position = '50'
-	#	@override.formFieldType = 'TYPO3.Admin:InlineStacked'
-	#}
+	manyToManyInline {
+		condition = ${propertyAnnotations['TYPO3\Admin\Annotations\Inline']}
+		@position = '50'
+		@override.formFieldType = 'TYPO3.Admin:InlineSeamless'
+	}
 
 	manyToMany {
 		condition = ${propertyAnnotations['Doctrine\ORM\Mapping\ManyToMany']}
@@ -153,4 +153,5 @@ prototype(TYPO3.Admin:Form.DefaultElementBuilder) {
 	propertyName = ${propertyName}
 	propertyType = ${propertyType}
 	className = ${className}
+	formBuilder = ${formBuilder}
 }

@@ -25,22 +25,17 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
     protected $annotations;
 
     /**
-     * @var \TYPO3\Admin\Factory\ModelFormFactory
-     * @FLOW3\Inject
+     *
+     * @var object
+     **/
+    protected $formBuilder;
+
+    /**
+     * Default Value of this Section
+     *
+     * @var mixed
      */
-    protected $modelFormFactory;
-
-    /**
-     *
-     * @var boolean
-     **/
-    protected $multipleMode = false;
-
-    /**
-     *
-     * @var string
-     **/
-    protected $namespace;
+    protected $defaultValue = NULL;
 
     /**
     * TODO: Document this Method! ( getAnnotations )
@@ -59,29 +54,16 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
     /**
     * TODO: Document this Method! ( getMultipleMode )
     */
-    public function getMultipleMode() {
-        return $this->multipleMode;
+    public function isMultipleMode() {
+        if ($this->annotations->has("Doctrine\ORM\Mapping\ManyToMany") || $this->annotations->has("Doctrine\ORM\Mapping\OneToMany")){
+            return TRUE;
+        } else {
+            return TRUE;
+        }
     }
 
-    /**
-    * TODO: Document this Method! ( setMultipleMode )
-    */
-    public function setMultipleMode($mode) {
-        $this->multipleMode = $mode;
-    }
-
-    /**
-    * TODO: Document this Method! ( getNamespace )
-    */
-    public function getNamespace() {
-        return $this->namespace;
-    }
-
-    /**
-    * TODO: Document this Method! ( setNamespace )
-    */
-    public function setNamespace($namespace) {
-        $this->namespace = $namespace;
+    public function setFormBuilder($formBuilder) {
+        $this->formBuilder = $formBuilder;
     }
 
     /**
@@ -89,6 +71,42 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
     */
     public function getNextKey() {
         return count($this->getElements()) + 1;
+    }
+
+
+    /**
+     * Set the default value with which the Form Element should be initialized
+     * during display.
+     *
+     * @param mixed $defaultValue the default value for this Form Element
+     * @api
+     */
+    public function setDefaultValue($defaultValue) {
+        $this->defaultValue = $defaultValue;
+
+        $value = $this->getValue();
+        if ($value !== NULL) {
+            $namespace = $this->getIdentifier();
+            if ($this->isMultipleMode()){
+                $inlineVariant = $this->annotations->getInline()->getVariant();
+                $containerSection = $this->createElement('container.' . $namespace, $inlineVariant . 'Item');
+                $containerSection->setAnnotations($this->annotations);
+                foreach ($value as $key => $object) {
+                    $section = $this->formBuilder->createElementsForSection(count($this->renderables), $containerSection, $namespace . "." . $key, $object);
+                    $this->formBuilder->loadDefaultValuesIntoForm($this->getRootForm(), $object, $namespace . "." . $key);
+                }
+            } else {
+
+            }
+        }
+    }
+
+    public function getValue() {
+        if ($this->defaultValue == NULL) {
+            $class = $this->annotations->getType();
+            return new $class();
+        }
+        return $this->defaultValue;
     }
 
     /**
@@ -106,35 +124,42 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
     * TODO: Document this Method! ( getTemplate )
     */
     public function getTemplate() {
-        $containerSection = clone $this;
-        $namespacedName = '_template.' . $this->namespace;
-        $itemSection = $containerSection->createElement($namespacedName . '.000', $this->type . 'Item');
-        $class = $this->annotations->getClass();
+        $class = $this->annotations->getType();
         $object = new $class();
-        if (!isset($this->modelFormFactory->form) || !is_object($this->modelFormFactory->form)) {
-            $this->modelFormFactory->form = $this->getRootForm();
-        }
-        $elements = $this->modelFormFactory->generateElements($object, $itemSection, $namespacedName . '.000');
-        return $itemSection;
+        $namespace = '_template.' . $this->getIdentifier() . '.000';
+        $parentSection = clone $this;
+        $containerSection = $parentSection->createElement('container.' . $namespace, 'TYPO3.Form:Section');
+        $section = $this->formBuilder->createFormForSingleObject($containerSection, $object, $namespace);
+        $containerSection->setDataType($class);
+        return $containerSection;
     }
 
     /**
     * TODO: Document this Method! ( getUnusedElement )
     */
-    public function getUnusedElement() {
-        $containerSection = clone $this;
-        $namespacedName = $this->namespace;
-        $key = count($this->getElements());
-        $itemSection = $containerSection->createElement(($namespacedName . '.') . $key, $this->type . 'Item');
-        $class = $this->annotations->getClass();
+    public function getUnusedElement($key = 0) {
+        $class = $this->annotations->getType();
         $object = new $class();
-        if (!isset($this->modelFormFactory->form) || !is_object($this->modelFormFactory->form)) {
-            $this->modelFormFactory->form = $this->getRootForm();
+        $namespace = $this->getIdentifier();
+        if($this->isMultipleMode()){
+            $namespace.= "." . $key;
         }
-        $elements = $this->modelFormFactory->generateElements($object, $itemSection, ($namespacedName . '.') . $key);
-        return $itemSection;
+        $inlineVariant = $this->annotations->getInline()->getVariant();
+        $containerSection = $this->createElement('container.' . $namespace, $inlineVariant . 'Item');
+        $containerSection->setAnnotations($this->annotations);
+        $section = $this->formBuilder->createElementsForSection(count($this->renderables), $containerSection, $namespace, $object);
+        return $containerSection;
     }
 
+    public function getElements() {
+        $elements = parent::getElements();
+
+        if (empty($elements)) {
+            $elements[] = $this->getUnusedElement();
+        }
+
+        return $elements;
+    }
 }
 
 ?>

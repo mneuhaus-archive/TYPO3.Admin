@@ -30,6 +30,56 @@
 .t3-pane-right {
   border-right: 1px solid #eee; }
 
+.t3-ui .center {
+  margin: 0 auto;
+  float: none; }
+
+/*--------------------------Inline----------------------------*/
+.t3-ui .box table {
+  width: 100%;
+  margin: 0; }
+.t3-ui .box .inline tr th:first-child, .t3-ui .box .inline tr td:first-child {
+  padding-left: 20px; }
+.t3-ui .box .inline tr th:last-child, .t3-ui .box .inline tr td:last-child {
+  padding-right: 20px; }
+.t3-ui .box th {
+  border-top: none;
+  padding: 4px 10px; }
+.t3-ui .box .box .legend {
+  font-size: 14px; }
+.t3-ui .box .form-inline .control-group {
+  margin: 10px 10px 0; }
+.t3-ui .box .inline-template,
+.t3-ui .box .inline-template input,
+.t3-ui .box .inline-template select,
+.t3-ui .box .inline-template textarea {
+  display: none; }
+.t3-ui .box div.inline-item {
+  border-bottom: 1px solid #DDD;
+  overflow: hidden; }
+.t3-ui .box div.inline-item .close {
+  margin-right: 20px;
+  margin-top: 10px;
+  display: none; }
+.t3-ui .box tr.inline-item .close {
+  margin-right: 20px;
+  margin-top: 8px;
+  margin-left: 10px;
+  display: none; }
+.t3-ui .box tr.inline-item td.tiny {
+  width: 20px;
+  padding: 1px 0; }
+.t3-ui .box .inline-unused {
+  background: #FAFAFA; }
+.t3-ui .box tr.inline-item .control-label {
+  display: none; }
+.t3-ui .box tr.inline-item .controls {
+  margin-left: 0; }
+.t3-ui .box tr.inline-item .control-group {
+  margin: 0; }
+.t3-ui .box tr.inline-item .controls input {
+  width: 100%; }
+
 .t3-ui .container {
   width: auto; }
 

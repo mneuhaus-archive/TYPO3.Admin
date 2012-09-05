@@ -124,6 +124,10 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 			$objectNamespaces[] = 'objects.0';
 		}
 
+
+        #$formDefinition->getProcessingRule('objects.0.tags')->getPropertyMappingConfiguration()->forProperty('0')->setTypeConverterOption('TYPO3\\FLOW3\\Property\\TypeConverter\\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
+        #$formDefinition->getProcessingRule('objects.0.tags')->getPropertyMappingConfiguration()->forProperty('0')->setTypeConverterOption('TYPO3\\FLOW3\\Property\\TypeConverter\\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_MODIFICATION_ALLOWED, TRUE);
+
 		$this->addValidatorsToForm($formDefinition, $objectNamespaces);
 		return $formDefinition;
 	}
@@ -131,8 +135,12 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 		return array('__identity' => $this->persistenceManager->getIdentifierByObject($object));
 	}
 
-	protected function createFormForSingleObject(\TYPO3\Form\Core\Model\AbstractSection $parentFormElement, $object, $namespace = '') {
+	public function createFormForSingleObject(\TYPO3\Form\Core\Model\AbstractSection $parentFormElement, $object, $namespace = '') {
 		$sectionNames = $this->findSections();
+		$form = $parentFormElement->getRootForm();
+        $form->getProcessingRule($parentFormElement->getIdentifier())->getPropertyMappingConfiguration()->setTypeConverterOption('TYPO3\\FLOW3\\Property\\TypeConverter\\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
+        $form->getProcessingRule($parentFormElement->getIdentifier())->getPropertyMappingConfiguration()->setTypeConverterOption('TYPO3\\FLOW3\\Property\\TypeConverter\\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_MODIFICATION_ALLOWED, TRUE);
+        $form->getProcessingRule($parentFormElement->getIdentifier())->getPropertyMappingConfiguration()->allowAllProperties();
 		foreach ($sectionNames as $sectionName) {
 			// TODO: Handle recursive sections
 			// TODO: clean up code
@@ -145,6 +153,7 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 			$section->setLabel($this->getLabelForObject($object));
 			$this->createElementsForSection($sectionName, $section, $namespace, $object);
 		}
+		return $section;
     }
 
 	protected function getLabelForObject($object) {
@@ -174,7 +183,7 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 		}
 	}
 
-	protected function loadDefaultValuesIntoForm(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, $object, $namespace) {
+	public function loadDefaultValuesIntoForm(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, $object, $namespace) {
 		$properties = \TYPO3\FLOW3\Reflection\ObjectAccess::getGettableProperties($object);
 		foreach ($properties as $propertyName => $propertyValue) {
 			$formElement = $formDefinition->getElementByIdentifier($namespace . '.' . $propertyName);
@@ -189,12 +198,11 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 		return array('Default');
 	}
 
-	protected function createElementsForSection($sectionName, \TYPO3\Form\FormElements\Section $section, $namespace, $object) {
+	public function createElementsForSection($sectionName, \TYPO3\Form\FormElements\Section $section, $namespace, $object) {
 		// TODO evaluate $sectionName
-		$className = $this->tsValue('className');
+		$className = $this->reflectionService->getClassNameByObject($object);
 		$propertyNames = $this->reflectionService->getClassPropertyNames($className);
 		$classSchema = $this->reflectionService->getClassSchema($className);
-
 		$this->tsRuntime->pushContext('parentFormElement', $section);
 		foreach ($propertyNames as $propertyName) {
 			$propertySchema = $classSchema->getProperty($propertyName);
@@ -205,9 +213,11 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 			$this->tsRuntime->pushContext('propertyAnnotations', $this->reflectionService->getPropertyAnnotations($className, $propertyName));
 			$this->tsRuntime->pushContext('propertyType', $propertySchema['type']);
 			$this->tsRuntime->pushContext('propertyElementType', $propertySchema['elementType']);
+			$this->tsRuntime->pushContext('formBuilder', $this);
 
 			$section = $this->tsRuntime->render($this->path . '/elementBuilder');
 
+			$this->tsRuntime->popContext();
 			$this->tsRuntime->popContext();
 			$this->tsRuntime->popContext();
 			$this->tsRuntime->popContext();

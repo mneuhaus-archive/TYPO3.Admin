@@ -23,7 +23,7 @@ class NodeFormBuilder extends ObjectFormBuilder {
 	protected function addValidatorsToForm(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, $objectNamespaces) {
 	}
 
-	protected function createElementsForSection($sectionName, \TYPO3\Form\FormElements\Section $section, $namespace, $object) {
+	public function createElementsForSection($sectionName, \TYPO3\Form\FormElements\Section $section, $namespace, $object) {
 		// TODO evaluate $sectionName
 		/* @var $object \TYPO3\TYPO3CR\Domain\Model\NodeInterface */
 		$contentType = $object->getContentType();
@@ -57,7 +57,7 @@ class NodeFormBuilder extends ObjectFormBuilder {
 		return $object->getLabel();
 	}
 
-	protected function loadDefaultValuesIntoForm(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, $object, $namespace) {
+	public function loadDefaultValuesIntoForm(\TYPO3\Form\Core\Model\FormDefinition $formDefinition, $object, $namespace) {
 		/* @var $object \TYPO3\TYPO3CR\Domain\Model\NodeInterface */
 		foreach ($object->getProperties() as $propertyName => $propertyValue) {
 			$formElement = $formDefinition->getElementByIdentifier($namespace . '.' . $propertyName);

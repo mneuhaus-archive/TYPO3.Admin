@@ -16,19 +16,19 @@
 			template: ".inline-template",
 			item: ".inline-item"
 		};
-	
+
 	// The actual plugin constructor
 	function Plugin( element, options ) {
 		this.element = jQuery(element);
-		
+
 		this.options = $.extend( {}, defaults, options) ;
-		
+
 		this._defaults = defaults;
 		this._name = pluginName;
-		
+
 		this.init();
 	}
-	
+
 	Plugin.prototype.init = function () {
 		// Create new row after the last one is used
 		this.element.find("input, select, textarea").live("keyup", function(){
@@ -43,11 +43,11 @@
 				row.find(".close").show();
 			}
 		});
-		
+
 		// Show close buttons
 		this.element.find(".close").show();
 		this.element.find(".inline-unused .close").hide();
-		
+
 		// Remove the item and create a new one if it was the last one
 		jQuery(".inline-item .close").live("click", function(){
 			var e = jQuery(this);
@@ -58,12 +58,12 @@
 			}
 		});
 	};
-	
+
 	function addItem(container){
 		var counter = Number(container.attr("data-counter"));
 		var tpl = container.find(".inline-template");
 		var newRow = tpl.clone().removeClass("inline-template").addClass("inline-item");
-		
+
 		newRow.find("input:hidden, select:hidden, textarea:hidden").removeAttr("disabled");
 		newRow.html(newRow.html().replace(/000/g, counter).replace(/\[_template\]/g, ""));
 		newRow.addClass("inline-unused").hide();

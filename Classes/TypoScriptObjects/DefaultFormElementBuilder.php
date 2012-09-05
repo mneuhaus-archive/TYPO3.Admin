@@ -25,6 +25,12 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
      */
     protected $annotationService;
 
+    /**
+     * @var \TYPO3\FLOW3\Reflection\ReflectionService
+     * @FLOW3\Inject
+     */
+    protected $reflectionService;
+
 	/**
 	 * @var string
 	 */
@@ -65,6 +71,11 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 	 */
 	protected $propertyType;
 
+	/**
+	 * @var object
+	 */
+	protected $formBuilder;
+
 	public function setIdentifier($identifier) {
 		$this->identifier = $identifier;
 	}
@@ -97,6 +108,10 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 		$this->propertyType = $propertyType;
 	}
 
+	public function setFormBuilder($formBuilder) {
+		$this->formBuilder = $formBuilder;
+	}
+
     /**
      * Evaluate the collection nodes
      *
@@ -121,7 +136,12 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 			$element->setAnnotations($classAnnotations->getPropertyAnnotations($this->tsValue("propertyName")));
 		}
 
-		$element->setDataType($this->tsValue("propertyType"));
+		if (method_exists($element, 'setFormBuilder')){
+			$element->setFormBuilder($this->tsValue("formBuilder"));
+		}
+
+		$varTags = $this->reflectionService->getPropertyTagValues($this->tsValue("className"), $this->tsValue("propertyName"), 'var');
+		$element->setDataType(ltrim(current($varTags), '\\'));
 
 		/* @var $element \TYPO3\Form\Core\Model\AbstractFormElement */
 		$element->setLabel($this->tsValue('label'));

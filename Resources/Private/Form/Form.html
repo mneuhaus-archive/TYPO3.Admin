@@ -1,7 +1,10 @@
 {namespace form=TYPO3\Form\ViewHelpers}
-<form:form object="{form}" method="post" id="{form.identifier}" enctype="multipart/form-data" class="form-horizontal" >
+<form:form object="{form}" method="post" id="{form.identifier}" enctype="multipart/form-data" class="form-horizontal center span10" >
    <form:renderRenderable renderable="{form.currentPage}" />
    <div class="actions">
       <f:render partial="TYPO3.Form:Form/Navigation" arguments="{form: form}" />
    </div>
 </form:form>
+<link rel="stylesheet" href="{f:uri.resource(path: 'css/main.css', package: 'TYPO3.Admin')}" />
+<script src="{f:uri.resource(path: 'js/jquery.inlineHelper.js', package: 'TYPO3.Admin')}"></script>
+<script src="{f:uri.resource(path: 'js/main.js', package: 'TYPO3.Admin')}"></script>
