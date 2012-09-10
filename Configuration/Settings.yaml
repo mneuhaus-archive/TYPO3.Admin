@@ -25,7 +25,6 @@ TYPO3:
     AnnotationProvider:
       - TYPO3\Admin\Reflection\Provider\DefaultsAnnotationProvider
       - TYPO3\Admin\Reflection\Provider\ReflectionAnnotationProvider
-      - TYPO3\Admin\Reflection\Provider\SettingsAnnotationProvider
 
     Mapping:
       Elements:
@@ -41,64 +40,7 @@ TYPO3:
         ^\\Doctrine\\Common\\Collections\\Collection\<\\[A-Za-z0-9\\]+\\Domain\\Model\\[A-za-z]+>$: TYPO3.Form:MultipleSelectDropdown
         ^\\Doctrine\\Common\\Collections\\Collection\<\\[A-Za-z0-9\\]+\\Security\\[A-za-z]+>$: TYPO3.Form:MultipleSelectDropdown
         ^\\ArrayObject\<\\[A-Za-z0-9\\]+>$: TYPO3.Form:MultipleSelectDropdown
-    Annotations:
-      TYPO3\TYPO3\Domain\Model\User:
-        Properties:
-          name:
-            Inline: TYPO3.Admin:InlineSeamless
-          electronicAddresses:
-            Inline: TYPO3.Admin:InlineTabular
-            Ignore: List
-          preferences:
-            Ignore: true
-          accounts:
-            Inline: TYPO3.Admin:InlineSeamless
-
-      TYPO3\Party\Domain\Model\PersonName:
-        Properties:
-          title:
-            Ignore: true
-          otherName:
-            Ignore: true
-          middleName:
-            Ignore: true
-          fullName:
-            Ignore: true
-          alias:
-            Ignore: true
-
-      TYPO3\FLOW3\Security\Account:
-        Properties:
-          accountIdentifier:
-            Label: Username
-            Title: true
-          credentialsSource:
-            Label: Passwort
-            Element: TYPO3.Admin:PasswordWithHashing
-          roles:
-            OptionsProvider:
-              Name: RoleOptionsProvider
-          creationDate:
-            Ignore: true
-          party:
-            Ignore: true
-          expirationDate:
-            Ignore: true
-          authenticationProviderName:
-            Ignore: true
-
-      TYPO3\Party\Domain\Model\ElectronicAddress:
-        Properties:
-          type:
-            Element: TYPO3.Form:SingleSelectDropdown
-            OptionsProvider:
-              Name: ConstOptionsProvider
-              RegEx: TYPE_.+
-          usage:
-            Element: TYPO3.Form:SingleSelectDropdown
-            OptionsProvider:
-              Name: ConstOptionsProvider
-              RegEx: USAGE_.+
+    Annotations: []
 
   TYPO3:
       modules:

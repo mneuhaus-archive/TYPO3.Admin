@@ -7,6 +7,8 @@ TYPO3\TYPO3\Domain\Model\User:
       electronicAddresses:
         TYPO3\Admin\Annotations\Inline: 'TYPO3.Admin:InlineTabular'
         TYPO3\Admin\Annotations\Ignore: List
+      primaryElectronicAddress:
+        TYPO3\Admin\Annotations\Ignore: true
       preferences:
         TYPO3\Admin\Annotations\Ignore: true
       accounts:
@@ -15,8 +17,8 @@ TYPO3\TYPO3\Domain\Model\User:
 TYPO3\Party\Domain\Model\PersonName:
   annotations:
     properties:
-      title:
-        TYPO3\Admin\Annotations\Ignore: true
+      #title:
+        #TYPO3\Admin\Annotations\Ignore: true
       otherName:
         TYPO3\Admin\Annotations\Ignore: true
       middleName:
