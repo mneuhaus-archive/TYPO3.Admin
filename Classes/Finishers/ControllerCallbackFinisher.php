@@ -32,7 +32,7 @@ class ControllerCallbackFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher
 		if (isset($this->options['objectIdentifiers'])) {
 			$objectArguments = \TYPO3\FLOW3\Utility\Arrays::arrayMergeRecursiveOverrule($objectArguments, $this->options['objectIdentifiers']);
 		}
-		$nextRequest->setArgument('objects', $objectArguments);
+		$nextRequest->setArgument('__objects', $objectArguments);
 
 		$forwardException = new \TYPO3\FLOW3\Mvc\Exception\ForwardException();
 		$nextRequest->setDispatched(FALSE);

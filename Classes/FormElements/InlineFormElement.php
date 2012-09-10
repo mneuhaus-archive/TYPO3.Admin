@@ -58,7 +58,7 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
         if ($this->annotations->has("Doctrine\ORM\Mapping\ManyToMany") || $this->annotations->has("Doctrine\ORM\Mapping\OneToMany")){
             return TRUE;
         } else {
-            return TRUE;
+            return FALSE;
         }
     }
 
@@ -83,30 +83,6 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
      */
     public function setDefaultValue($defaultValue) {
         $this->defaultValue = $defaultValue;
-
-        $value = $this->getValue();
-        if ($value !== NULL) {
-            $namespace = $this->getIdentifier();
-            if ($this->isMultipleMode()){
-                $inlineVariant = $this->annotations->getInline()->getVariant();
-                $containerSection = $this->createElement('container.' . $namespace, $inlineVariant . 'Item');
-                $containerSection->setAnnotations($this->annotations);
-                foreach ($value as $key => $object) {
-                    $section = $this->formBuilder->createElementsForSection(count($this->renderables), $containerSection, $namespace . "." . $key, $object);
-                    $this->formBuilder->loadDefaultValuesIntoForm($this->getRootForm(), $object, $namespace . "." . $key);
-                }
-            } else {
-
-            }
-        }
-    }
-
-    public function getValue() {
-        if ($this->defaultValue == NULL) {
-            $class = $this->annotations->getType();
-            return new $class();
-        }
-        return $this->defaultValue;
     }
 
     /**
@@ -130,7 +106,7 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
         $parentSection = clone $this;
         $containerSection = $parentSection->createElement('container.' . $namespace, 'TYPO3.Form:Section');
         $section = $this->formBuilder->createFormForSingleObject($containerSection, $object, $namespace);
-        $containerSection->setDataType($class);
+#        $containerSection->setDataType($class);
         return $containerSection;
     }
 
@@ -149,16 +125,6 @@ class InlineFormElement extends \TYPO3\Form\FormElements\Section {
         $containerSection->setAnnotations($this->annotations);
         $section = $this->formBuilder->createElementsForSection(count($this->renderables), $containerSection, $namespace, $object);
         return $containerSection;
-    }
-
-    public function getElements() {
-        $elements = parent::getElements();
-
-        if (empty($elements)) {
-            $elements[] = $this->getUnusedElement();
-        }
-
-        return $elements;
     }
 }
 

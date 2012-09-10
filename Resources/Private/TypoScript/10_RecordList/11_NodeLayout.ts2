@@ -1,4 +1,6 @@
-prototype(TYPO3.Admin:ContentRecordList) < prototype(TYPO3.Admin:RecordList)
+prototype(TYPO3.Admin:ContentRecordList) < prototype(TYPO3.Admin:RecordList){
+	recordList.list = TYPO3.Admin:RecordList.List
+}
 prototype(TYPO3.Admin:ContentRecordList) << 50.admin:nodeTree()
 
 # adjustments for TYPO3CR Nodes

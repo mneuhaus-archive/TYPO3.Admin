@@ -32,8 +32,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class DeleteController extends \TYPO3\Admin\Core\AbstractAdminController {
 
 	public function initializeAction() {
-		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
-		$this->arguments['objects']->getPropertyMappingConfiguration()->allowAllProperties();
+#		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
+#		$this->arguments['objects']->getPropertyMappingConfiguration()->allowAllProperties();
 	}
 
 	/**

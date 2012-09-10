@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\Admin\TypoScriptObjects;
+namespace TYPO3\Admin\TypoScriptObjects\FormElementBuilder;
 
 /*                                                                        *
  * This script belongs to the TYPO3.Admin package.              		  *
@@ -76,6 +76,11 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 	 */
 	protected $formBuilder;
 
+	/**
+	 * @var object
+	 */
+	protected $propertyValue;
+
 	public function setIdentifier($identifier) {
 		$this->identifier = $identifier;
 	}
@@ -112,6 +117,10 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 		$this->formBuilder = $formBuilder;
 	}
 
+	public function setPropertyValue($propertyValue) {
+		$this->propertyValue = $propertyValue;
+	}
+
     /**
      * Evaluate the collection nodes
      *
@@ -140,11 +149,12 @@ class DefaultFormElementBuilder extends \TYPO3\TypoScript\TypoScriptObjects\Abst
 			$element->setFormBuilder($this->tsValue("formBuilder"));
 		}
 
-		$varTags = $this->reflectionService->getPropertyTagValues($this->tsValue("className"), $this->tsValue("propertyName"), 'var');
-		$element->setDataType(ltrim(current($varTags), '\\'));
+		#$varTags = $this->reflectionService->getPropertyTagValues($this->tsValue("className"), $this->tsValue("propertyName"), 'var');
+		#$element->setDataType(ltrim(current($varTags), '\\'));
 
 		/* @var $element \TYPO3\Form\Core\Model\AbstractFormElement */
 		$element->setLabel($this->tsValue('label'));
+		$element->setDefaultValue($this->tsValue('propertyValue'));
 
 		return $element;
     }

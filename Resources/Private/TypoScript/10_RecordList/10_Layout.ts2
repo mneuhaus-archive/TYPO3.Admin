@@ -4,8 +4,6 @@ prototype(TYPO3.Admin:RecordList) < prototype(TYPO3.TypoScript:FluidRenderer) {
 	templatePath = 'resource://TYPO3.Admin/Private/Elements/RecordList/Layout.html'
 	currentFormat = ${format}
 
-	formatSelector = TYPO3.Admin:RecordList.FormatSelector
-	recordList.list = TYPO3.Admin:RecordList.List
 	recordList.table = TYPO3.Admin:RecordList.Table
 	navigationArea = TYPO3.TypoScript:TypoScriptArrayRenderer
 
@@ -32,10 +30,10 @@ prototype(TYPO3.Admin:RecordList) < prototype(TYPO3.TypoScript:FluidRenderer) {
 			objects = ${objects}
 		}
 
-		formatSelector = TYPO3.Admin:RecordList.FormatSelector {
-			@position = 10
-		}
-		formatSelector << 1.wrap(prefix: '<div class="pull-left btn-group">', suffix: '</div>')
+#		formatSelector = TYPO3.Admin:RecordList.FormatSelector {
+#			@position = 10
+#		}
+#		formatSelector << 1.wrap(prefix: '<div class="pull-left btn-group">', suffix: '</div>')
 
 		paginator = TYPO3.Admin:Pagination {
 			templatePath = 'resource://TYPO3.Admin/Private/Elements/RecordList/Pagination.html'

@@ -32,8 +32,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class EditController extends \TYPO3\Admin\Core\AbstractAdminController {
 
 	public function initializeIndexAction() {
-		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
-		$this->arguments['objects']->getPropertyMappingConfiguration()->allowAllProperties();
+#		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
+#		$this->arguments['objects']->getPropertyMappingConfiguration()->allowAllProperties();
 	}
 
 	/**
@@ -48,25 +48,12 @@ class EditController extends \TYPO3\Admin\Core\AbstractAdminController {
 		$this->view->assign('callback', 'update');
 	}
 
-	public function initializeUpdateAction() {
-		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
-		$propertyMappingConfiguration = $this->arguments['objects']->getPropertyMappingConfiguration();
-		$propertyMappingConfiguration->allowAllProperties();
-		foreach ($this->request->getArgument('objects') as $index => $tmp) {
-			$propertyMappingConfiguration->forProperty($index)
-					->allowAllProperties()
-					->setTypeConverterOption('TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_MODIFICATION_ALLOWED, TRUE);
-		}
-
-	}
 	/**
 	 * @param string $type
-	 * @param Doctrine\Common\Collections\Collection $objects
 	 */
-	public function updateAction($type, $objects) {
+	public function updateAction($type) {
+		$objects = $this->request->getInternalArgument("__objects");
 		foreach ($objects as $object) {
-				// TODO: the if-condition below is a little hack such that we do NOT persist for TYPO3CR Node objects,
-				// which are already persisted as they are stateful.
 			if (!$this->persistenceManager->isNewObject($object)) {
 				$this->persistenceManager->update($object);
 			}

@@ -43,22 +43,11 @@ class NewController extends \TYPO3\Admin\Core\AbstractAdminController {
 		$this->view->assign('callback', 'create');
 	}
 
-	public function initializeCreateAction() {
-		$this->arguments['objects']->setDataType('Doctrine\Common\Collections\Collection<' . $this->request->getArgument('type') . '>');
-		$propertyMappingConfiguration = $this->arguments['objects']->getPropertyMappingConfiguration();
-		$propertyMappingConfiguration->allowAllProperties();
-		foreach ($this->request->getArgument('objects') as $index => $tmp) {
-			$propertyMappingConfiguration->forProperty($index)
-					->allowAllProperties()
-					->setTypeConverterOption('TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter', \TYPO3\FLOW3\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_MODIFICATION_ALLOWED, TRUE);
-		}
-
-	}
 	/**
 	 * @param string $type
-	 * @param Doctrine\Common\Collections\Collection $objects
 	 */
-	public function createAction($type, $objects) {
+	public function createAction($type) {
+		$objects = $this->request->getInternalArgument("__objects");
 		foreach ($objects as $object) {
 			$this->persistenceManager->add($object);
 		}
