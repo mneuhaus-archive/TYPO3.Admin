@@ -32,12 +32,24 @@ See corresponding forge issue: http://forge.typo3.org/issues/37293
 
 ```
 
+	TYPO3.FLOW3:
+	# https://review.typo3.org/#/c/13549
+	git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.FLOW3 refs/changes/49/13549/8 && git cherry-pick FETCH_HEAD
+
+	# https://review.typo3.org/#/c/14389
+	git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.FLOW3 refs/changes/89/14389/4 && git cherry-pick FETCH_HEAD
+
+
 	TYPO3.TYPO3:
 	# http://review.typo3.org/14313
 	git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.TYPO3 refs/changes/13/14313/1 && git checkout FETCH_HEAD
 
+
 	TYPO3.Fluid:
 	# https://review.typo3.org/#/c/13972
 	git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.Fluid refs/changes/72/13972/1 && git cherry-pick FETCH_HEAD
+
+	# https://review.typo3.org/#/c/14347
+	git fetch git://git.typo3.org/FLOW3/Packages/TYPO3.Fluid refs/changes/47/14347/2 && git cherry-pick FETCH_HEAD
 
 ```
