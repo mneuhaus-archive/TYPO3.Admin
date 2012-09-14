@@ -116,18 +116,14 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 			$objectIdentifiers = array();
 			foreach ($this->tsValue('objects') as $object) {
 				$section = $this->createFormForSingleObject($page, $object, 'objects.' . $i);
-#				$section->setDataType(get_class($object));
 				$objectNamespaces[] = 'objects.' . $i;
 				$objectIdentifiers[] = $this->getObjectIdentifierArrayForObject($object);
 				$i++;
-				$formDefinition->getProcessingRule('objects')->setDataType("\Doctrine\Common\Collections\Collection");
-				$formDefinition->getProcessingRule('objects.0')->setDataType(get_class($object));
 			}
 
 			$forwardFinisher->setOption('objectIdentifiers', $objectIdentifiers);
 		} else {
 			$section = $this->createFormForSingleObject($page, NULL, 'objects.0.');
-#			$section->setDataType(get_class($object));
 			$objectNamespaces[] = 'objects.0';
 		}
 
@@ -156,10 +152,6 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 			$section->setLabel($this->getLabelForObject($object));
 			$this->createElementsForSection($sectionName, $section, $namespace, $object);
 		}
-
-		$section->setDataType(get_class($object));
-		$parentFormElement->setDataType(get_class($object));
-
 		return $section;
     }
 
@@ -202,7 +194,6 @@ class ObjectFormBuilder extends \TYPO3\TypoScript\TypoScriptObjects\AbstractTsOb
 		$classSchema = $this->reflectionService->getClassSchema($className);
 		$this->tsRuntime->pushContext('parentFormElement', $section);
 
-		$section->setDataType(get_class($object));
 		foreach ($propertyNames as $propertyName) {
 			$propertySchema = $classSchema->getProperty($propertyName);
 
