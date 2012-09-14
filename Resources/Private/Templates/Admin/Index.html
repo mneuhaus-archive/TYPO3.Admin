@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {namespace a=TYPO3\Expose\ViewHelpers}
+    <meta charset="utf-8">
+    <title>{settings.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="{f:uri.resource(path: 'js/jquery.1.7.1.min.js', package: 'TYPO3.Expose')}"></script>
+    <link rel="stylesheet" href="{f:uri.resource(path: 'css/expose.css', package: 'TYPO3.Expose')}" />
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <f:link.action action="index" class="brand">Project name</f:link.action>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <f:for each="{settings.modules}" key="module" as="moduleConfiguration">
+                <li{f:if(condition: '{rootModule} == {module}', then: ' class="active"')}>
+                  <a:link.module path="{module}">{moduleConfiguration.label}</a:link.module>
+                </li>
+              </f:for>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a:render.action />
+
+  </body>
+</html>

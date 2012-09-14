@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\Admin\TypoScriptObjects\FormElementBuilder;
+namespace TYPO3\Expose\TypoScriptObjects\FormElementBuilder;
 
 /*                                                                        *
- * This script belongs to the TYPO3.Admin package.              		  *
+ * This script belongs to the TYPO3.Expose package.              		  *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -31,7 +31,7 @@ class InlineFormElementBuilder extends DefaultFormElementBuilder {
 
 		$annotations = $this->tsValue("propertyAnnotations");
 
-		if (isset($annotations['TYPO3\Admin\Annotations\Ignore'])){
+		if (isset($annotations['TYPO3\Expose\Annotations\Ignore'])){
 			return NULL;
 		}
 
